@@ -1,14 +1,26 @@
 package com.nguyen.dagger1.di
 
+import android.content.Context
 import com.nguyen.dagger1.registration.RegistrationActivity
+import dagger.BindsInstance
 import dagger.Component
 
-// if we build the app now, we'll get this error:
-// [Dagger/MissingBinding] com.nguyen.dagger1.storage.Storage cannot be provided without an @Provides-annotated method.
-// that's because we haven't told Dagger how to provide an object of type Storage which is needed by UserManager!
-@Component
+// AppComponent includes StorageModule with information on how to provide Storage instances. Storage
+// has a dependency on Context, which is passed in the AppComponent's factory create method.
+// so Storage has all its dependencies covered
+@Component(modules = [StorageModule::class])
 interface AppComponent {
-    // RegistrationActivity requests injection; Dagger has to provide the dependencies annotated
-    // with @Inject (RegistrationViewModel) (Dagger has to create an instance of RegistrationViewModel)
+    // Factory to create instances of the AppComponent
+    @Component.Factory
+    interface Factory {
+        // Context is required by SharedPreferencesStorage, in turn required by StorageModule
+        // so we need to pass in Context when we create the application graph
+        // otherwise we get this error:
+        // [Dagger/MissingBinding] android.content.Context cannot be provided without an @Provides-annotated method
+        fun create(@BindsInstance context: Context): AppComponent
+    }
+
+    // RegistrationActivity requests injection, so Dagger has to provide the dependencies annotated
+    // with @Inject, which is RegistrationViewModel
     fun inject(activity: RegistrationActivity)
 }
