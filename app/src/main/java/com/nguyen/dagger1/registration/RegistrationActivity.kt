@@ -9,9 +9,11 @@ import com.nguyen.dagger1.databinding.ActivityRegistrationBinding
 import com.nguyen.dagger1.main.MainActivity
 import com.nguyen.dagger1.registration.enterdetails.EnterDetailsFragment
 import com.nguyen.dagger1.registration.termsandconditions.TermsAndConditionsFragment
+import javax.inject.Inject
 
 class RegistrationActivity : AppCompatActivity(R.layout.activity_registration) {
-
+    // @Inject annotated fields will be provided by Dagger
+    @Inject
     lateinit var registrationViewModel: RegistrationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,6 @@ class RegistrationActivity : AppCompatActivity(R.layout.activity_registration) {
         val binding = ActivityRegistrationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        registrationViewModel = RegistrationViewModel((application as MyApplication).userManager)
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_holder, EnterDetailsFragment())
             .commit()

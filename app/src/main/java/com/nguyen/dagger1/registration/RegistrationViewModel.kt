@@ -1,12 +1,15 @@
 package com.nguyen.dagger1.registration
 
 import com.nguyen.dagger1.user.UserManager
+import javax.inject.Inject
 
 /**
  * RegistrationViewModel is the ViewModel that the Registration flow ([RegistrationActivity]
  * and fragments) uses to keep user's input data.
  */
-class RegistrationViewModel(val userManager: UserManager) {
+// @Inject tells Dagger how to provide instances of this type
+// Dagger also knows that UserManager is a dependency
+class RegistrationViewModel @Inject constructor(val userManager: UserManager) {
 
     private var username: String? = null
     private var password: String? = null
