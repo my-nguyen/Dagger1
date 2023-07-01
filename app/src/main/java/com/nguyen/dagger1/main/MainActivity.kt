@@ -8,10 +8,15 @@ import com.nguyen.dagger1.databinding.ActivityMainBinding
 import com.nguyen.dagger1.login.LoginActivity
 import com.nguyen.dagger1.registration.RegistrationActivity
 import com.nguyen.dagger1.settings.SettingsActivity
+import com.nguyen.dagger1.user.UserManager
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var userManager: UserManager
 
-    private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
 
     /**
@@ -20,9 +25,9 @@ class MainActivity : AppCompatActivity() {
      * else carry on with MainActivity
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
-        val userManager = (application as MyApplication).userManager
         if (!userManager.isUserLoggedIn()) {
             if (!userManager.isUserRegistered()) {
                 startActivity(Intent(this, RegistrationActivity::class.java))
@@ -35,7 +40,6 @@ class MainActivity : AppCompatActivity() {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
-            mainViewModel = MainViewModel(userManager.userDataRepository!!)
             setupViews()
         }
     }
