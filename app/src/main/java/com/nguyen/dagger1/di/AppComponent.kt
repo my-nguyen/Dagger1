@@ -5,7 +5,9 @@ import com.nguyen.dagger1.main.MainActivity
 import com.nguyen.dagger1.registration.RegistrationActivity
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Singleton
 
+@Singleton
 // AppComponent includes StorageModule with information on how to provide Storage instances. Storage
 // has a dependency on Context, which is passed in the AppComponent's factory create method.
 // so Storage has all its dependencies covered

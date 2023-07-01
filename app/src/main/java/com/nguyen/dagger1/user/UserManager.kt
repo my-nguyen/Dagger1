@@ -2,6 +2,7 @@ package com.nguyen.dagger1.user
 
 import com.nguyen.dagger1.storage.Storage
 import javax.inject.Inject
+import javax.inject.Singleton
 
 private const val REGISTERED_USER = "registered_user"
 private const val PASSWORD_SUFFIX = "password"
@@ -10,6 +11,10 @@ private const val PASSWORD_SUFFIX = "password"
  * Handles User lifecycle. Manages registrations, logs in and logs out.
  * Knows when the user is logged in.
  */
+@Singleton
+// use @Singleton scope, so that the same instance of UserManager will be provided to
+// RegistrationActivity and MainActivity. without this @Singleton scoping, Dagger will provide
+// a different instance of UserManager for MainActivity and RegistrationActivity
 class UserManager @Inject constructor(private val storage: Storage) {
 
     /**
