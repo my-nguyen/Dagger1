@@ -14,6 +14,8 @@ import javax.inject.Singleton
 // AppSubccomponents also needs to be included in the AppComponent, so AppComponent is now aware
 // that RegistrationComponent is its subcomponent
 @Component(modules = [StorageModule::class, AppSubcomponents::class])
+// AppComponent is attached to the lifecycle of the Application because we want to use the same
+// instance of the graph as long as the application is in memory
 interface AppComponent {
     // Factory to create instances of the AppComponent
     @Component.Factory

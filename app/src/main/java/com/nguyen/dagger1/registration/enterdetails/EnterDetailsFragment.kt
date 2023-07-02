@@ -55,7 +55,7 @@ class EnterDetailsFragment : Fragment(R.layout.fragment_enter_details) {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         // For Fragments, we inject Components using the onAttach method after calling super.onAttach.
-        (requireActivity().application as MyApplication).appComponent.inject(this)
+        (activity as RegistrationActivity).registrationComponent.inject(this)
     }
 
     private fun setupViews(binding: FragmentEnterDetailsBinding) {

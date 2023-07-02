@@ -29,6 +29,6 @@ class TermsAndConditionsFragment : Fragment(R.layout.fragment_terms_and_conditio
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (requireActivity().application as MyApplication).appComponent.inject(this)
+        (activity as RegistrationActivity).registrationComponent.inject(this)
     }
 }

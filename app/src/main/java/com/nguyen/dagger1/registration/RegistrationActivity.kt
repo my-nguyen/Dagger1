@@ -15,13 +15,16 @@ class RegistrationActivity : AppCompatActivity(R.layout.activity_registration) {
     // @Inject annotated fields will be provided by Dagger
     @Inject
     lateinit var registrationViewModel: RegistrationViewModel
+    // Since RegistrationComponent is attached to the RegistrationActivity lifecycle, we need
+    // a reference to the component
+    // this variable is not annotated with @Inject because we don't expect it to be provided by Dagger
+    lateinit var registrationComponent: RegistrationComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Ask Dagger to inject our dependencies.
-        // this populates the fields that RegistrationActivity has annotated with @Inject (i.e. registrationViewModel).
-        // When using Activities, inject Dagger in the Activity's onCreate method before calling
-        // super.onCreate to avoid issues with fragment restoration
-        (application as MyApplication).appComponent.inject(this)
+        // Creates an instance of Registration component by grabbing the factory from the app graph
+        registrationComponent = (application as MyApplication).appComponent.registrationComponent().create()
+        // Injects this activity to the registration component
+        registrationComponent.inject(this)
         super.onCreate(savedInstanceState)
 
         val binding = ActivityRegistrationBinding.inflate(layoutInflater)
