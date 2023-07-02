@@ -4,6 +4,8 @@ import android.content.Context
 import com.nguyen.dagger1.login.LoginComponent
 import com.nguyen.dagger1.main.MainActivity
 import com.nguyen.dagger1.registration.RegistrationComponent
+import com.nguyen.dagger1.settings.SettingsActivity
+import com.nguyen.dagger1.user.UserManager
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -28,14 +30,13 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    // the inject methods for registration view classes (RegistrationActivity, EnterDetailsFragment,
-    // and TermsAndConditionsFragment) have been removed because they won't be used anymore. Those
-    // classes will use the RegistrationComponent
-    fun inject(activity: MainActivity)
-
-    // Instead, for the RegistrationActivity to create instances of RegistrationComponent, we need
-    // to expose RegistrationComponent factory here in AppComponent
+    // for the RegistrationActivity to create instances of RegistrationComponent, we need to expose
+    // RegistrationComponent factory here
     fun registrationComponent(): RegistrationComponent.Factory
     // also, expose LoginComponent factory
     fun loginComponent(): LoginComponent.Factory
+
+    // Expose UserManager so that MainActivity and SettingsActivity can access a particular instance
+    // of UserComponent
+    fun userManager(): UserManager
 }

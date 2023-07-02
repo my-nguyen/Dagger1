@@ -14,8 +14,6 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var mainViewModel: MainViewModel
-    @Inject
-    lateinit var userManager: UserManager
 
     private lateinit var binding: ActivityMainBinding
 
@@ -25,9 +23,10 @@ class MainActivity : AppCompatActivity() {
      * else carry on with MainActivity
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
+        // Grab userManager from appComponent to check if the user is logged in or not
+        val userManager = (application as MyApplication).appComponent.userManager()
         if (!userManager.isUserLoggedIn()) {
             if (!userManager.isUserRegistered()) {
                 startActivity(Intent(this, RegistrationActivity::class.java))
@@ -40,6 +39,9 @@ class MainActivity : AppCompatActivity() {
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
+            // If MainActivity needs to be displayed, get the UserComponent from the application
+            // graph and inject MainActivity
+            userManager.userComponent!!.inject(this)
             setupViews()
         }
     }

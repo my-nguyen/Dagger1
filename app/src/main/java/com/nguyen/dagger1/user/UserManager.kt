@@ -11,23 +11,23 @@ private const val PASSWORD_SUFFIX = "password"
  * Handles User lifecycle. Manages registrations, logs in and logs out.
  * Knows when the user is logged in.
  */
-@Singleton
 // use @Singleton scope, so that the same instance of UserManager will be provided to
 // RegistrationActivity and MainActivity. without this @Singleton scoping, Dagger will provide
 // a different instance of UserManager for MainActivity and RegistrationActivity
-class UserManager @Inject constructor(private val storage: Storage) {
-
-    /**
-     *  UserDataRepository is specific to a logged in user. This determines if the user
-     *  is logged in or not, when the user logs in, a new instance will be created.
-     *  When the user logs out, this will be null.
-     */
-    var userDataRepository: UserDataRepository? = null
+@Singleton
+// attach the lifetime of UserComponent to UserManager, since UserManager handles registrations,
+// log in and log out attempts
+class UserManager @Inject constructor(private val storage: Storage,
+                                      // UserManager needs to know how to create instances of it
+                                      private val userComponentFactory: UserComponent.Factory) {
+    // use UserComponent instead of UserDataRepository
+    var userComponent: UserComponent? = null
+        private set
 
     val username: String
         get() = storage.getString(REGISTERED_USER)
 
-    fun isUserLoggedIn() = userDataRepository != null
+    fun isUserLoggedIn() = userComponent != null
 
     fun isUserRegistered() = storage.getString(REGISTERED_USER).isNotEmpty()
 
@@ -49,7 +49,7 @@ class UserManager @Inject constructor(private val storage: Storage) {
     }
 
     fun logout() {
-        userDataRepository = null
+        userComponent = null
     }
 
     fun unregister() {
@@ -60,6 +60,6 @@ class UserManager @Inject constructor(private val storage: Storage) {
     }
 
     private fun userJustLoggedIn() {
-        userDataRepository = UserDataRepository(this)
+        userComponent = userComponentFactory.create()
     }
 }

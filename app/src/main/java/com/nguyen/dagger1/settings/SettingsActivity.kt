@@ -7,19 +7,20 @@ import com.nguyen.dagger1.MyApplication
 import com.nguyen.dagger1.R
 import com.nguyen.dagger1.databinding.ActivitySettingsBinding
 import com.nguyen.dagger1.login.LoginActivity
+import javax.inject.Inject
 
 class SettingsActivity : AppCompatActivity(R.layout.activity_settings) {
-
-    private lateinit var settingsViewModel: SettingsViewModel
+    @Inject
+    lateinit var settingsViewModel: SettingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val userManager = (application as MyApplication).appComponent.userManager()
+        userManager.userComponent!!.inject(this)
         super.onCreate(savedInstanceState)
+
         val binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val userManager = (application as MyApplication).userManager
-
-        settingsViewModel = SettingsViewModel(userManager.userDataRepository!!, userManager)
         setupViews(binding)
     }
 
