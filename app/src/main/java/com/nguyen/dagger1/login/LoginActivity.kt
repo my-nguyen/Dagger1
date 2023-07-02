@@ -10,18 +10,22 @@ import com.nguyen.dagger1.MyApplication
 import com.nguyen.dagger1.databinding.ActivityLoginBinding
 import com.nguyen.dagger1.main.MainActivity
 import com.nguyen.dagger1.registration.RegistrationActivity
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
-
-    private lateinit var loginViewModel: LoginViewModel
+    @Inject
+    lateinit var loginViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Creates an instance of Login component by grabbing the factory from the app graph and
+        // injects this activity to that Component
+        (application as MyApplication).appComponent.loginComponent().create().inject(this)
         super.onCreate(savedInstanceState)
+
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Creates ViewModel and listens for the loginState LiveData
-        loginViewModel = LoginViewModel((application as MyApplication).userManager)
+        // listen for the loginState LiveData
         loginViewModel.loginState.observe(this, Observer<LoginViewState> { state ->
             when (state) {
                 is LoginSuccess -> {

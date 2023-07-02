@@ -1,6 +1,7 @@
 package com.nguyen.dagger1.di
 
 import android.content.Context
+import com.nguyen.dagger1.login.LoginComponent
 import com.nguyen.dagger1.main.MainActivity
 import com.nguyen.dagger1.registration.RegistrationComponent
 import dagger.BindsInstance
@@ -35,4 +36,6 @@ interface AppComponent {
     // Instead, for the RegistrationActivity to create instances of RegistrationComponent, we need
     // to expose RegistrationComponent factory here in AppComponent
     fun registrationComponent(): RegistrationComponent.Factory
+    // also, expose LoginComponent factory
+    fun loginComponent(): LoginComponent.Factory
 }
