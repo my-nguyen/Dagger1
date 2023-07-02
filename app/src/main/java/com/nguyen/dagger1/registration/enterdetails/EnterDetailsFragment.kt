@@ -1,13 +1,16 @@
 package com.nguyen.dagger1.registration.enterdetails
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.nguyen.dagger1.MyApplication
 import com.nguyen.dagger1.R
 import com.nguyen.dagger1.databinding.FragmentEnterDetailsBinding
 import com.nguyen.dagger1.registration.RegistrationActivity
 import com.nguyen.dagger1.registration.RegistrationViewModel
+import javax.inject.Inject
 
 class EnterDetailsFragment : Fragment(R.layout.fragment_enter_details) {
 
@@ -20,16 +23,15 @@ class EnterDetailsFragment : Fragment(R.layout.fragment_enter_details) {
      * They could get combined but for the sake of the codelab, we're separating them so we have
      * different ViewModels with different lifecycles.
      */
-    private lateinit var registrationViewModel: RegistrationViewModel
-    private lateinit var enterDetailsViewModel: EnterDetailsViewModel
+    @Inject
+    lateinit var registrationViewModel: RegistrationViewModel
+    @Inject
+    lateinit var enterDetailsViewModel: EnterDetailsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentEnterDetailsBinding.bind(view)
 
-        registrationViewModel = (activity as RegistrationActivity).registrationViewModel
-
-        enterDetailsViewModel = EnterDetailsViewModel()
         enterDetailsViewModel.enterDetailsState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is EnterDetailsSuccess -> {
@@ -48,6 +50,12 @@ class EnterDetailsFragment : Fragment(R.layout.fragment_enter_details) {
         }
 
         setupViews(binding)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // For Fragments, we inject Components using the onAttach method after calling super.onAttach.
+        (requireActivity().application as MyApplication).appComponent.inject(this)
     }
 
     private fun setupViews(binding: FragmentEnterDetailsBinding) {

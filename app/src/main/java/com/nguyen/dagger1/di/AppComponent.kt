@@ -2,7 +2,7 @@ package com.nguyen.dagger1.di
 
 import android.content.Context
 import com.nguyen.dagger1.main.MainActivity
-import com.nguyen.dagger1.registration.RegistrationActivity
+import com.nguyen.dagger1.registration.RegistrationComponent
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -11,7 +11,9 @@ import javax.inject.Singleton
 // AppComponent includes StorageModule with information on how to provide Storage instances. Storage
 // has a dependency on Context, which is passed in the AppComponent's factory create method.
 // so Storage has all its dependencies covered
-@Component(modules = [StorageModule::class])
+// AppSubccomponents also needs to be included in the AppComponent, so AppComponent is now aware
+// that RegistrationComponent is its subcomponent
+@Component(modules = [StorageModule::class, AppSubcomponents::class])
 interface AppComponent {
     // Factory to create instances of the AppComponent
     @Component.Factory
@@ -23,9 +25,12 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    // RegistrationActivity requests injection, so Dagger has to provide the dependencies annotated
-    // with @Inject, which is RegistrationViewModel
-    fun inject(activity: RegistrationActivity)
-    // tell Dagger that MainActivity also requests injection
+    // the inject methods for registration view classes (RegistrationActivity, EnterDetailsFragment,
+    // and TermsAndConditionsFragment) have been removed because they won't be used anymore. Those
+    // classes will use the RegistrationComponent
     fun inject(activity: MainActivity)
+
+    // Instead, for the RegistrationActivity to create instances of RegistrationComponent, we need
+    // to expose RegistrationComponent factory here in AppComponent
+    fun registrationComponent(): RegistrationComponent.Factory
 }
