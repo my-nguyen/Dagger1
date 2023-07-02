@@ -10,4 +10,8 @@ open class MyApplication : Application() {
         // Create an AppComponent using its Factory constructor, with applicationContext as Context
         DaggerAppComponent.factory().create(applicationContext)
     }
+
+    open fun initializeComponent(): AppComponent {
+        return DaggerAppComponent.factory().create(applicationContext)
+    }
 }
