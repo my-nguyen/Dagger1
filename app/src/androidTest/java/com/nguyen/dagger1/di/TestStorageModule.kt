@@ -1,5 +1,6 @@
 package com.nguyen.dagger1.di
 
+import com.nguyen.dagger1.storage.FakeStorage
 import com.nguyen.dagger1.storage.Storage
 import dagger.Binds
 import dagger.Module
